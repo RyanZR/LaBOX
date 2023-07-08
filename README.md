@@ -1,6 +1,7 @@
 # LaBOX
 
 An automatic ligand-based grid box size calculation tool for molecular docking.
+Revamped from LABOGRID.
 
 ```
 Usage
@@ -28,7 +29,7 @@ Return
 4. **Scale factor of 2** (default) was used to adjust the gridbox size based on values in 3.
 
 ## Bug
-If you encounter any bugs, please report the issue to https://github.com/RyanZR/labogrid/issues.
+If you encounter any bugs, please report the issue to https://github.com/RyanZR/LaBOX/issues.
 
 ## License
-The script is licensed under MIT, see the [LICENSE](https://github.com/RyanZR/labogrid/blob/main/LICENSE) file for details.
+The script is licensed under MIT, see the [LICENSE](https://github.com/RyanZR/LaBOX/blob/main/LICENSE) file for details.
