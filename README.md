@@ -1,4 +1,4 @@
-# LABOGRID
+# LaBOX
 
 An automatic ligand-based grid box size calculation tool for molecular docking.
 
