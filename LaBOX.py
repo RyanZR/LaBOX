@@ -120,10 +120,10 @@ def main():
     except getopt.GetoptError as msg:
         print(f'LaBOX.py')
         print(f'╰─○ {msg}')
-        sys.exit()
+        sys.exit(2)
     
     FILENAME = None
-    FIND_CENTER = None
+    CENTER = False
     SCALE = 2
     xcoor = None
     ycoor = None
@@ -137,10 +137,9 @@ def main():
         if opt in ('-l', '--ligand'):
             FILENAME = arg
         if opt in ('-s', '--scale'):
-            SCALE = arg
-            SCALE = float(SCALE)
+            SCALE = float(arg)
         if opt in ('-c', '--center'):
-            FIND_CENTER = True
+            CENTER = True
         if opt in ('-h', '--help'):
             usage()
             sys.exit()
@@ -152,7 +151,7 @@ def main():
     file_handler(TARGET)
     EXT = os.path.splitext(TARGET)[-1]
     DATA = open(TARGET, 'r').readlines()
-    LaBOX(DATA, EXT, SCALE, FIND_CENTER)
+    LaBOX(DATA, EXT, SCALE, CENTER)
     
 if __name__ == '__main__':
     main()
