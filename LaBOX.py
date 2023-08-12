@@ -2,13 +2,13 @@
 
 #==============================================================================
 #
-#                        __        _____ _____ __ __ 
+#                        __        _____ _____ __ __
 #                       |  |   ___| __  |     |  |  |
 #                       |  |__| .|| __ -|  |  |-   -|
 #                       |_____|__||_____|_____|__|__|
 #
 #
-#   LaBOX - Gridbox size calculation for ligand docking
+#   LaBOX - Gridbox size calculation for ligand dockinga
 #
 #   Get more information from https://github.com/RyanZR/LaBOX
 #
@@ -23,7 +23,7 @@ import sys
 import getopt
 import statistics
 
-def usage():
+def usage() -> None:
     print(f'Usage')
     print(f'╰─○ LaBOX.py [-l] <filename>')
     print(f'')
@@ -36,7 +36,7 @@ def usage():
     print(f'        -s  scale factor (default is 2)')
     print(f'        -c  grid box center')
 
-def about():
+def about() -> None:
     print(f'==============================================================================')
     print(f'                         __        _____ _____ __ __                          ')
     print(f'                        |  |   ___| __  |     |  |  |                         ')
@@ -53,9 +53,9 @@ def about():
     print(f'                                                                              ')
     print(f'==============================================================================')
 
-def file_handler(input_file):
+def file_handler(input_file: str) -> None:
     ext = os.path.splitext(input_file)[-1]
-    if input_file == None:
+    if input_file is None:
         print(f'LaBOX.py')
         print(f'╰─○ Invalid file or incorrect usage')
         sys.exit()
@@ -69,7 +69,7 @@ def file_handler(input_file):
         print(f'╰─○ File format {ext} not supported')
         sys.exit()
 
-def get_coordinates(data, ext):
+def get_coordinates(data: list[str], ext: str) -> list[float]:
     if ext == '.mol2':
         commence = next(n for n, line in enumerate(data) if line.strip() != '' and line.split()[0] == '@<TRIPOS>ATOM') + 1
         conclude = next(n for n, line in enumerate(data) if line.strip() != '' and line.split()[0] == '@<TRIPOS>BOND')
@@ -89,21 +89,22 @@ def get_coordinates(data, ext):
     xcoor, ycoor, zcoor = zip(*coord)
     return [list(xcoor), list(ycoor), list(zcoor)]
 
-def min_max(coord: list):
+def min_max(coord: list) -> list[float]:
     return [min(coord), max(coord)]
 
-def center_XYZ(coord_range: list):
+def center_XYZ(coord_range: list) -> float:
     return round(statistics.mean(coord_range), 3)
 
-def length_WHD(coord_range: list, scale: float):
+def length_WHD(coord_range: list, scale: float) -> float:
     return round(abs(coord_range[0] - coord_range[1]) * scale, 3)
 
-def LaBOX(data: str, ext: str, scale: float, find_center: bool):
+def LaBOX(data: str, ext: str, scale: float, find_center: bool) -> None:
     COOR = get_coordinates(data, ext)
     X,Y,Z = COOR
     ranges = [min_max(X), min_max(Y), min_max(Z)]
-    center = [center_XYZ(ranges[0]), center_XYZ(ranges[1]), center_XYZ(ranges[2])] 
+    center = [center_XYZ(ranges[0]), center_XYZ(ranges[1]), center_XYZ(ranges[2])]
     bxsize = [length_WHD(ranges[0], scale), length_WHD(ranges[1], scale), length_WHD(ranges[2], scale)]
+    
     print(f'LaBOX.py')
     if find_center:
         print(f'╰─○ Grid Box Center:  X {center[0]:>8}  Y {center[1]:>8}  Z {center[2]:>8}')
@@ -111,17 +112,17 @@ def LaBOX(data: str, ext: str, scale: float, find_center: bool):
     if not find_center:
         print(f'╰─○ Grid Box Size  :  W {bxsize[0]:>8}  H {bxsize[1]:>8}  D {bxsize[2]:>8}')
 
-def main():
+def main() -> None:
     try:
         opts, args = getopt.getopt(
-            sys.argv[1:], 
-            ':l:s:cha', 
+            sys.argv[1:],
+            ':l:s:cha',
             ['ligand=', 'scale=', 'center', 'help', 'about'])
     except getopt.GetoptError as msg:
         print(f'LaBOX.py')
         print(f'╰─○ {msg}')
         sys.exit(2)
-    
+
     FILENAME = None
     CENTER = False
     SCALE = 2
@@ -132,7 +133,7 @@ def main():
     if opts == []:
         usage()
         sys.exit()
-        
+
     for opt, arg in opts:
         if opt in ('-l', '--ligand'):
             FILENAME = arg
@@ -151,7 +152,7 @@ def main():
     file_handler(TARGET)
     EXT = os.path.splitext(TARGET)[-1]
     DATA = open(TARGET, 'r').readlines()
-    LaBOX(DATA, EXT, SCALE, CENTER)
-    
+    COOR = LaBOX(DATA, EXT, SCALE, CENTER)
+
 if __name__ == '__main__':
     main()
